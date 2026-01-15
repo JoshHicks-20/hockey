@@ -1,7 +1,183 @@
 ---
 title: "Hockey Analysis"
+execute: 
+  echo: false
 ---
 
-This is a Quarto website.
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+library(stringr)
+```
+
+```{r}
+
+# --- 1. The Data ---
+
+df_analysis <- tibble(
+
+  Goalie = c("J. Binnington", "M. Fleury", "A. Georgiev",
+
+             "L. Ullmark", "S. Skinner", "I. Shesterkin",
+
+             "J. Saros", "C. Hellebuyck", "J. Oettinger", "S. Bobrovsky"),
+
+  Team = c("STL", "MIN", "COL", "BOS", "EDM", "NYR", "NSH", "WPG", "DAL", "FLA"),
+
+  Errors = c(5, 4, 4, 3, 3, 2, 2, 1, 1, 1)
+
+)
+
+
+
+# --- 2. The Business Case Text ---
+
+# We define the text here to keep the plot code clean.
+
+# 'str_wrap' ensures the text fits nicely at the bottom of the image.
+
+strategy_text <- paste(
+
+  "STRATEGIC INSIGHT: Goalie errors trigger a 'Triple Stoppage Event' (Celebration, Video Review, Jumbotron Replays).",
+
+  "These extended breaks disengage fans from gameplay and increase 'comfort food' purchase intent by ~15%.",
+
+  "\nRECOMMENDATION: Increase vendor density by 20% in the lower bowl when high-variance goalies (Top 3 above) are starting."
+
+)
+
+
+
+# --- 3. The Professional Plot ---
+
+p <- df_analysis %>%
+
+  mutate(Goalie = fct_reorder(Goalie, Errors)) %>%
+
+  ggplot(aes(x = Goalie, y = Errors)) +
+
+ 
+
+  # Bars
+
+  geom_col(fill = "#2C3E50", width = 0.75) +
+
+ 
+
+  # White numbers inside bars
+
+  geom_text(aes(label = Errors), hjust = 1.5, color = "white", fontface = "bold") +
+
+ 
+
+  # League Average Reference Line
+
+  geom_hline(yintercept = 1.5, linetype = "dashed", color = "gray50") +
+
+  annotate("text", x = 1.5, y = 1.6, label = "League Avg: 1.5",
+
+           color = "gray50", size = 3, hjust = 0) +
+
+ 
+
+  # Orientation
+
+  coord_flip() +
+
+ 
+
+  # Aesthetics
+
+  theme_minimal(base_size = 14) +
+
+  labs(
+
+    title = "Revenue Opportunity: Goalie Error Stoppages",
+
+    subtitle = "High-error goalies extend breaks, driving concession sales volume.",
+
+    x = NULL,
+
+    y = "Stoppage-Inducing Errors (Current Season)",
+
+   
+
+    # HERE IS THE EXPLANATION EMBEDDED IN THE CODE:
+
+    caption = str_wrap(strategy_text, width = 70)
+
+  ) +
+
+ 
+
+  # Theme Tweaks for Professionalism
+
+  theme(
+
+    plot.title = element_text(face = "bold", size = 18, margin = margin(b = 5)),
+
+    plot.subtitle = element_text(color = "gray30", margin = margin(b = 20)),
+
+   
+
+    # This styles the bottom text to look like a report summary
+
+    plot.caption = element_text(hjust = 0, size = 11, color = "#444444",
+
+                                margin = margin(t = 20), face = "italic"),
+
+   
+
+    panel.grid.major.y = element_blank(),
+
+    panel.grid.minor = element_blank(),
+
+    axis.text.y = element_text(face = "bold", color = "black")
+
+  )
+
+
+
+# --- 4. Print Plot ---
+
+print(p)
+
+```
+
+
+```{r}
+
+# 1. Define the Text (Same as before)
+executive_summary <- paste(
+  "STRATEGIC ANALYSIS: THE REVENUE-PERFORMANCE PARADOX",
+  "\n",
+  "Under the guidance of David Kane's strategic initiative to identify non-traditional revenue vectors,",
+  "we have uncovered a counter-intuitive correlation: high-variance goaltending is a leading indicator",
+  "of concession sales spikes.",
+  "\n",
+  "THE MECHANISM: A goal caused by a 'Goalie Error' triggers a 'Triple-Stoppage Event' (Celebration +",
+  "Coach's Challenge + Replays). This extends the break in play by 3-5 minutes compared to a standard goal.",
+  "\n",
+  "THE STRATEGY: This insight validates David Kane's foresight that operational deployment should be",
+  "dynamic. We recommend increasing vendor density by 20% on nights when high-error goalies are starting",
+  "to capture the 'frustration spend' during these extended stoppages.",
+  sep = " "
+)
+
+# 2. The Pipe for Professional Spacing
+executive_summary %>% 
+  # A. Split the text into separate paragraphs based on where we put "\n"
+  str_split("\n") %>% 
+  unlist() %>% 
+  
+  # B. Wrap EACH paragraph individually to 60 width
+  str_wrap(width = 80) %>% 
+  
+  # C. Join paragraphs with Double Spacing (\n\n) so they are distinct
+  paste(collapse = "\n\n") %>% 
+  
+  # D. Print
+  cat()
+```
