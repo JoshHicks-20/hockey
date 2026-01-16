@@ -1,0 +1,58 @@
+---
+title: "Why Hockey?"
+format: html
+execute: 
+  echo: false
+---
+
+
+```{r}
+library(stringr)
+library(magrittr)
+
+# 1. Define the Text
+# We combine the content into a single string, using "\n" as markers for new paragraphs
+why_hockey_text <- paste(
+  "THE HOCKEY ADVANTAGE",
+  "\n",
+  "STRUCTURAL SUPERIORITY: Unlike other major sports that feature a single halftime",
+  "or short quarter breaks, professional hockey offers a unique 'Double Peak' opportunity.",
+  "The standard structure of two 18-minute intermissions creates two distinct,",
+  "extended windows for transaction volume, effectively doubling the high-margin",
+  "selling periods compared to football or soccer.",
+  "\n",
+  "DEMOGRAPHIC PREMIUM: Market analysis indicates that the hockey fan demographic",
+  "indexes significantly higher in disposable income compared to general sports",
+  "audiences. This 'Wallet Share' advantage correlates with a higher willingness to",
+  "purchase premium food and beverage items, making per-capita yield optimization",
+  "more responsive to strategic shifts in vendor operations.",
+  "\n",
+  "THE STOPPAGE ECONOMY: Hockey's unique pacing—characterized by high-variance",
+  "stoppages (reviews, icing, equipment repairs)—creates frequent 'Micro-Breaks.'",
+  "Our data suggests that these unpredictable pauses, particularly those driven by",
+  "goaltender interactions, trigger impulse spending behaviors that static",
+  "game structures fail to capture.",
+  "\n",
+  "CONCLUSION: The combination of predictable intermission spikes and exploitable",
+  "stoppage variance makes hockey the ideal laboratory for testing David Kane's",
+  "high-density vendor deployment strategy.",
+  sep = " "
+)
+
+# 2. The Pipe for Professional Spacing
+why_hockey_text %>% 
+  
+  # A. Split the text into separate paragraphs based on where we put "\n"
+  str_split("\n") %>% 
+  unlist() %>% 
+  
+  # B. Wrap EACH paragraph individually to 80 width
+  str_wrap(width = 80) %>% 
+  
+  # C. Join paragraphs with Double Spacing (\n\n) so they are distinct
+  paste(collapse = "\n\n") %>% 
+  
+  # D. Print to console
+  cat()
+```
+

@@ -1,0 +1,58 @@
+---
+title: "Red Light Foundation"
+format: html
+execute: 
+  echo: false
+---
+
+
+```{r}
+#| warning: false
+library(ggplot2)
+library(stringr)
+
+# 1. Define the Sappy Story & Disproportionate Packages
+foundation_text <- paste(
+  "THE RED LIGHT FOUNDATION: STOP THE FLASHING",
+  "\n\n",
+  "THE TRAGEDY: Every night, goaltenders like Gordie stand alone in the cold crease.",
+  "He tries his best. He really does. But then it happens: The buzzer sounds. The Red Light flashes.",
+  "It burns his retinas with the color of failure. While the fans cheer and David Kane counts",
+  "the record-breaking hot dog revenue from the extended stoppage, Gordie weeps inside his mask.",
+  "The smell of victory sausages wafts down to the ice, mocking his emptiness.",
+  "\n\n",
+  "OUR MISSION: We cannot stop the pucks (neither can Gordie). But we can stop the loneliness.",
+  "We provide emotional support animals—specifically seeing-eye dogs—to goalies who clearly",
+  "cannot see the puck.",
+  "\n\n",
+  "PLEASE DONATE TODAY. CHOOSE A TIER (CURRENCY: KYRGYZSTANI SOM - KGS):",
+  "\n\n",
+  "TIER 1: 'THE PARTICIPATION TROPHY' — 14.50 KGS",
+  "(Provides one (1) tissue for Gordie to dry his eyes during the TV timeout.)",
+  "\n\n",
+  "TIER 2: 'THE VIDEOTAPE REVIEW' — 865,000.00 KGS",
+  "(We bribe the replay officials to disallow one goal per season.)",
+  "\n\n",
+  "TIER 3: 'THE VEZINA ILLUSION' — 4,200,999,999.00 KGS",
+  "(We buy the opposing team and force them to shoot wide for 60 minutes.)",
+  sep = " "
+)
+
+# 2. Render as a Document Image with 1.5 Spacing
+ggplot() +
+  xlim(0, 1) + ylim(0, 1) +
+  theme_void() + # Removes the grey background/grid
+  
+  # Render the text
+  annotate("text", 
+           x = 0.5, y = 0.5, 
+           label = str_wrap(foundation_text, width = 60), 
+           family = "serif",   # The "Executive Summary" font style
+           size = 4.5,         # Readable text size
+           lineheight = 1.5,   # The requested 1.5 spacing
+           hjust = 0.5,        # Center align the text block
+           vjust = 0.5) +
+  
+  # Add a red border for the "Red Light" theme
+  theme(plot.background = element_rect(color = "#D32F2F", size = 5, fill = "white"))
+```

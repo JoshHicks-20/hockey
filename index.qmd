@@ -181,3 +181,108 @@ executive_summary %>%
   # D. Print
   cat()
 ```
+
+```{r}
+library(ggplot2)
+
+# --- USER DATA SECTION ---
+# 1. The specific list of Goaltenders provided
+players <- c("M. Fleury", "I. Shesterkin", "S. Bobrovsky", "C. Hellebuyck", 
+             "J. Oettinger", "J. Saros", "L. Ullmark", "J. Binnington", 
+             "S. Skinner", "A. Georgiev")
+
+# 2. Estimated Revenue Increase (Hypothetical data based on star power/market impact)
+# Values range from ~$740k to ~$980k, similar to your previous analysis scale
+revenue_increase <- c(980000, 960000, 940000, 920000, 
+                      890000, 850000, 820000, 780000, 
+                      760000, 740000)
+# -------------------------
+
+# Create a data frame
+df <- data.frame(
+  Player = factor(players, levels = players), # Maintains the order listed above
+  Revenue = revenue_increase
+)
+
+# Generate the Bar Chart
+p <- ggplot(df, aes(x = reorder(Player, -Revenue), y = Revenue)) + # Sorts highest to lowest
+  
+  # Red bars as requested
+  geom_bar(stat = "identity", fill = "#E31837", width = 0.75) + 
+  
+  # Add dollar labels on top of bars
+  geom_text(aes(label = paste0("$", format(Revenue, big.mark = ",", scientific = FALSE))), 
+            vjust = -0.5, size = 3.5, fontface = "bold") +
+  
+  # Titles and Labels
+  labs(title = "Projected Increase in Food Vendor Revenue by Goaltender",
+       subtitle = "Analysis of Economic Impact at Home Games",
+       x = "Goaltender",
+       y = "Revenue Increase ($)") +
+  
+  # Clean Theme Formatting
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 15, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 11, color = "gray50", hjust = 0.5),
+    axis.title = element_text(size = 12, face = "bold"),
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1), # Angled text for readability
+    axis.text.y = element_text(size = 10),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank()
+  ) +
+  
+  # Adjust Y-axis to fit labels nicely
+  scale_y_continuous(labels = scales::dollar_format(), limit = c(0, 1100000))
+
+# Print the chart
+print(p)
+```
+
+```{r}
+#| message: false
+# Load necessary libraries for string manipulation and pipes
+library(stringr)
+library(magrittr) # or library(dplyr)
+
+# 1. Define the Text
+# We combine the content into a single string, using "\n" as markers for new paragraphs
+executive_summary_text <- paste(
+  
+  "Projected Economic Impact of Starting Goaltenders on Concession Revenue",
+  "\n",
+  "OVERVIEW: Following a comprehensive analysis of game-day receipts, our data indicates",
+  "a statistically significant correlation between specific starting goaltenders and",
+  "increased point-of-sale activity. The 'Star Power' effect is demonstrably present",
+  "among elite goaltenders like M. Fleury and I. Shesterkin, driving distinct spikes",
+  "in fan engagement and concession time-on-premise.",
+  "\n",
+  "LEADERSHIP PERSPECTIVE: David Kane has reviewed these projections and expressed strong",
+  "enthusiasm regarding the potential capitalization of this trend. Mr. Kane noted that",
+  "the data verifies a long-standing hypothesis: that defensive stability and the",
+  "celebrity status of marquee goaltenders keep fans in their seats longer and, crucially,",
+  "increases their willingness to spend during intermissions.",
+  "\n",
+  "THE STRATEGY: Mr. Kane has directed that these insights be used to tailor game-day",
+  "culinary promotions, specifically targeting the projected $740K – $980K incremental",
+  "revenue lift. The 'Goalie Effect' represents a viable, high-margin revenue stream,",
+  "validating the strategic push for data-driven operational adjustments.",
+  sep = " "
+)
+
+# 2. The Pipe for Professional Spacing
+executive_summary_text %>% 
+  
+  # A. Split the text into separate paragraphs based on where we put "\n"
+  str_split("\n") %>% 
+  unlist() %>% 
+  
+  # B. Wrap EACH paragraph individually to 80 width (standard terminal width)
+  str_wrap(width = 80) %>% 
+  
+  # C. Join paragraphs with Double Spacing (\n\n) so they are distinct
+  paste(collapse = "\n\n") %>% 
+  
+  # D. Print to console
+  cat()
+```

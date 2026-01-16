@@ -7,7 +7,15 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - href: about.qmd
+        text: About
+      - href: why_hockey.qmd
+        text: Why Hockey?
+      - href: goals_animation.qmd
+
+
+
+
 
 format:
   html:
